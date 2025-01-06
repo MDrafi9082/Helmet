@@ -53,7 +53,6 @@ const LoginForm = () => {
       <div className="login-box">
         <div className="login-header">
           <h2>Vehicle Fine Checker</h2>
-          <div className="car-icon">🚗</div>
         </div>
         
         <form onSubmit={handleSubmit}>
@@ -63,7 +62,7 @@ const LoginForm = () => {
               id="numberPlate"
               name="numberPlate"
               type="text"
-              placeholder="Enter vehicle number plate"
+              placeholder="Enter vehicle number"
               value={formData.numberPlate}
               onChange={handleInputChange}
               maxLength="8"
