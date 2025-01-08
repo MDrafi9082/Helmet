@@ -1,21 +1,11 @@
-// db.js (backend/config folder)
 const mysql = require('mysql2');
 
-// Create connection to the database
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',          // MySQL username
-  password: 'Rafi#sql24',  // MySQL password
-  database: 'vehicle_fines'  // Database name
+// Create a database connection pool
+const db = mysql.createPool({
+  host: 'localhost',    // Database host
+  user: 'root',         // Database username
+  password: 'Rafi#sql24',         // Database password
+  database: 'vehicle_fines'    // Your database name
 });
 
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-  } else {
-    console.log('Connected to the MySQL database');
-  }
-});
-
-module.exports = db;
+module.exports = db;  // Export the DB connection

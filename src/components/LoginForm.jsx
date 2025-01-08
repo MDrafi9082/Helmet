@@ -1,99 +1,65 @@
-// LoginForm.jsx (src/components folder)
-import { useState } from 'react';
-import './LoginForm.css';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';  // Use useNavigate in v6
+import './LoginForm.css'; // Import the style for LoginForm
 
 const LoginForm = () => {
-  const [formData, setFormData] = useState({
-    numberPlate: '',
-    phoneNumber: ''
-  });
-  const [error, setError] = useState('');
+  const [numberPlate, setNumberPlate] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const formattedValue = name === 'numberPlate' ? value.toUpperCase() : value;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: formattedValue
-    }));
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
-  
-    if (!formData.numberPlate || !formData.phoneNumber) {
-      setError('Please fill in all fields');
-      return;
-    }
-  
-    const numberPlateRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{4}$/;
-    if (!numberPlateRegex.test(formData.numberPlate)) {
-      setError('Please enter a valid Indian vehicle number plate');
-      return;
-    }
-  
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      setError('Please enter a valid 10-digit phone number');
-      return;
-    }
-  
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          numberPlate: formData.numberPlate,
-          phoneNumber: formData.phoneNumber,
-        }),
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        numberPlate,
+        phoneNumber,
       });
   
-      const data = await response.json();
-      console.log(data); // Check for success response from server
+      if (response.data.success) {
+        console.log('Login successful'); // Log successful login
+        localStorage.setItem('token', response.data.token);
+        navigate('/transactions');
+      } else {
+        setErrorMessage('Invalid credentials');
+      }
     } catch (err) {
-      setError('Login failed. Please try again.');
-      console.error('Error:', err);
+      console.error('Error during login:', err);
+      setErrorMessage(err.response ? err.response.data.message : 'Something went wrong');
     }
   };
+  
   
 
   return (
     <div className="login-container">
-      <div className="login-box"> {/* Added login-box div */}
-        <div className="login-header">
-          <h2>Vehicle Fine Checker</h2>
-        </div>
-        <form onSubmit={handleSubmit}>
+      <div className="login-box">
+        <h1 className="login-header">LOGIN</h1>
+        <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="numberPlate">Number Plate:</label>
+            <label>Number Plate:</label>
             <input
-              id="numberPlate"
-              name="numberPlate"
               type="text"
-              value={formData.numberPlate}
-              onChange={handleInputChange}
-              className="number-plate-input" // Applied specific styling
+              className="number-plate-input"
+              value={numberPlate}
+              onChange={(e) => setNumberPlate(e.target.value)}
+              required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="phoneNumber">Phone Number:</label>
+            <label>Phone Number:</label>
             <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className="phone-input" // Applied specific styling
+              type="text"
+              className="phone-input"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              required
             />
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" className="login-button">
-            Submit
-          </button>
+          <button type="submit" className="login-button">Login</button>
         </form>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );

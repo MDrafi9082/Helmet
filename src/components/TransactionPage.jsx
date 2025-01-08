@@ -1,131 +1,78 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './TransactionPage.css';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
-const TransactionPage = () => {
-  const navigate = useNavigate();
-  const [fines, setFines] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+function TransactionPage() {
+  const [transactions, setTransactions] = useState([]);
+  const [numberPlate, setNumberPlate] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const fetchTransactions = useCallback(async () => {
+    try {
+      if (!numberPlate || !phoneNumber) {
+        setErrorMessage('Both number plate and phone number are required.');
+        return;
+      }
+
+      // Log the URL to ensure it's correct
+      const url = `http://localhost:5000/api/transactions?numberPlate=${numberPlate}&phoneNumber=${phoneNumber}`;
+      console.log(`Fetching data from: ${url}`);
+
+      const response = await axios.get(url);
+
+      if (response.data && response.data.length > 0) {
+        setTransactions(response.data);
+      } else {
+        setErrorMessage('No transactions found for the given credentials.');
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setErrorMessage('Error fetching data. Please try again later.');
+    }
+  }, [numberPlate, phoneNumber]);
 
   useEffect(() => {
-    setTimeout(() => {
-      const mockFines = [
-        {
-          id: 1,
-          date: '2024-01-15',
-          violation: 'Speeding',
-          location: 'Main Street',
-          amount: 150.00,
-          status: 'Unpaid'
-        },
-        {
-          id: 2,
-          date: '2024-01-20',
-          violation: 'Illegal Parking',
-          location: 'Central Avenue',
-          amount: 75.00,
-          status: 'Unpaid'
-        },
-        {
-          id: 3,
-          date: '2024-01-25',
-          violation: 'Red Light',
-          location: 'Oak Road',
-          amount: 200.00,
-          status: 'Paid'
-        }
-      ];
-
-      setFines(mockFines);
-      setTotalAmount(mockFines.reduce((sum, fine) => 
-        fine.status === 'Unpaid' ? sum + fine.amount : sum, 0
-      ));
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  const handleLogout = () => {
-    navigate('/login');
-  };
-
-  const handlePayment = (fineId) => {
-    console.log('Processing payment for fine:', fineId);
-  };
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading your fines...</p>
-      </div>
-    );
-  }
+    if (numberPlate && phoneNumber) {
+      fetchTransactions(); // Automatically fetch when both fields are populated
+    }
+  }, [numberPlate, phoneNumber, fetchTransactions]);
 
   return (
-    <div className="transaction-container">
-      <div className="header">
-        <h1>Traffic Violations & Fines</h1>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+    <div>
+      <h1>Transaction Details</h1>
+      <input
+        type="text"
+        placeholder="Enter Vehicle Number Plate"
+        value={numberPlate}
+        onChange={(e) => setNumberPlate(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Enter Phone Number"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
+      />
+      <button onClick={fetchTransactions}>Fetch Transactions</button>
 
-      <div className="summary-box">
-        <div className="summary-item">
-          <h3>Total Unpaid Fines</h3>
-          <p className="amount">${totalAmount.toFixed(2)}</p>
-        </div>
-        <div className="summary-item">
-          <h3>Total Violations</h3>
-          <p>{fines.length}</p>
-        </div>
-      </div>
-
-      <div className="fines-container">
-        <h2>Fine Details</h2>
-        {fines.length === 0 ? (
-          <div className="no-fines">
-            <p>No traffic violations found.</p>
-          </div>
+      <div>
+        <h2>Transaction Data</h2>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {transactions.length > 0 ? (
+          <ul>
+            {transactions.map((transaction) => (
+              <li key={transaction.id}>
+                <p>Vehicle: {transaction.vehicleName}</p>
+                <p>Transaction Date: {transaction.transactionDate}</p>
+                <p>Details: {transaction.transactionDetails}</p>
+              </li>
+            ))}
+          </ul>
         ) : (
-          fines.map(fine => (
-            <div key={fine.id} className={`fine-card ${fine.status.toLowerCase()}`}>
-              <div className="fine-header">
-                <h3>{fine.violation}</h3>
-                <span className={`status-badge ${fine.status.toLowerCase()}`}>
-                  {fine.status}
-                </span>
-              </div>
-              <div className="fine-details">
-                <div className="detail-item">
-                  <span className="label">Date:</span>
-                  <span>{new Date(fine.date).toLocaleDateString()}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="label">Location:</span>
-                  <span>{fine.location}</span>
-                </div>
-                <div className="detail-item">
-                  <span className="label">Amount:</span>
-                  <span className="amount">${fine.amount.toFixed(2)}</span>
-                </div>
-              </div>
-              {fine.status === 'Unpaid' && (
-                <button 
-                  className="pay-button"
-                  onClick={() => handlePayment(fine.id)}
-                >
-                  Pay Now
-                </button>
-              )}
-            </div>
-          ))
+          <p>No transactions found for the given credentials.</p>
         )}
       </div>
     </div>
   );
-};
+}
 
 export default TransactionPage;

@@ -8,7 +8,7 @@
 }
 
 .login-box {
-  background:rgb(15, 15, 15);
+  background: rgb(15, 15, 15);
   padding: 2.5rem;
   border-radius: 15px;
   width: 100%;
@@ -18,6 +18,7 @@
 
 .login-header {
   text-align: center;
+  color:white;
   margin-bottom: 2rem;
 }
 
@@ -43,7 +44,7 @@
   width: 100%;
   padding: 0.75rem;
   border: 2px solid white;
-  border-color:black;
+  border-color: black;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -63,7 +64,7 @@
   font-family: 'Courier New', monospace;
   font-size: 1.2rem !important;
   background-color: rgb(35, 34, 34);
-  color : white;
+  color: white;
 }
 
 .phone-input {
@@ -72,7 +73,7 @@
   font-family: 'Courier New', monospace;
   font-size: 1.2rem !important;
   background-color: rgb(35, 34, 34);
-  color : white;
+  color: white;
 }
 
 .error-message {

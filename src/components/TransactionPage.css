@@ -1,197 +1,123 @@
+/* Styling for the entire container */
 .transaction-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 100vh;
-  background: rgb(6, 6, 6); /* Dark background */
-  padding: 2rem;
+  background: #f0f0f5;
+  padding: 20px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  color: white; /* Light text on dark background */
-}
-
-.header h1 {
-  font-size: 1.8rem;
-}
-
-.logout-button {
-  padding: 0.5rem 1rem;
-  background-color: transparent;
-  border: 2px solid white;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.logout-button:hover {
-  background-color: white;
-  color: #1e3c72;
-}
-
-.summary-box {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.summary-item {
-  background: rgba(255, 255, 255, 0.1); /* Darker background for the item */
-  padding: 1.5rem;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Darker shadow */
-}
-
-.summary-item h3 {
-  color: #e0e0e0; /* Light gray text for headings */
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-}
-
-.summary-item .amount {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #f44336; /* A bright red shade */
-}
-
-.fines-container {
-  background: rgba(255, 255, 255, 0.1); /* Dark background */
-  padding: 2rem;
+/* Box for holding the content */
+.transaction-box {
+  background-color: #ffffff;
+  padding: 2.5rem;
   border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Darker shadow */
-}
-
-.fines-container h2 {
-  color: #e0e0e0; /* Light gray text */
-  margin-bottom: 1.5rem;
-}
-
-.fine-card {
-  background: rgba(0, 0, 0, 0.8); /* Darker background for fine cards */
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Darker shadow */
-  border-left: 4px solid #1e3c72;
-}
-
-.fine-card.paid {
-  border-left-color: #10b981;
-}
-
-.fine-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.fine-header h3 {
-  color: #e0e0e0;
-  margin: 0;
-}
-
-.status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.status-badge.unpaid {
-  background-color: #fef2f2;
-  color: #dc2626;
-}
-
-.status-badge.paid {
-  background-color: #ecfdf5;
-  color: #10b981;
-}
-
-.fine-details {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-item .label {
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.detail-item .amount {
-  font-weight: 600;
-  color: #dc2626; /* Red text for unpaid amounts */
-}
-
-.pay-button {
   width: 100%;
-  padding: 0.75rem;
+  max-width: 800px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Table styling */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.transaction-table th, .transaction-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+  color: #333;
+}
+
+.transaction-table td {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Hover effect for table rows */
+.transaction-table tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+/* Button Styling */
+button {
   background-color: #1e3c72;
   color: white;
+  padding: 12px 20px;
   border: none;
-  border-radius: 6px;
-  margin-top: 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
-.pay-button:hover {
+button:hover {
   background-color: #2a5298;
 }
 
-.loading-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgb(6, 6, 6); /* Dark background */
-  color: white;
+/* Input styling */
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
 }
 
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
+input[type="text"]:focus {
+  outline: none;
+  border-color: #1e3c72;
+  box-shadow: 0 0 8px rgba(30, 60, 114, 0.2);
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.no-fines {
+/* Error message styling */
+.error-message {
+  color: #dc2626;
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #fef2f2;
+  border-radius: 8px;
+  border-left: 4px solid #dc2626;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-align: center;
-  padding: 2rem;
-  color: #64748b;
 }
 
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-  .transaction-container {
-    padding: 1rem;
+  .transaction-box {
+    padding: 1.5rem;
   }
-  
-  .header h1 {
-    font-size: 1.5rem;
+
+  .transaction-table th, .transaction-table td {
+    font-size: 0.85rem;
+    padding: 10px;
   }
-  
-  .fine-card {
-    padding: 1rem;
+
+  button {
+    padding: 10px;
+  }
+
+  input[type="text"] {
+    padding: 10px;
   }
 }

@@ -1,33 +1,26 @@
-// server.js (backend folder)
 const express = require('express');
-const db = require('./config/db');
 const cors = require('cors');
-
 const app = express();
-const port = 5000;
 
-// Middleware
-app.use(express.json());  // To parse JSON bodies
-app.use(cors());          // To handle cross-origin requests
+// Enable CORS for all domains
+app.use(cors());
 
-// Route to handle login and store data in SQL
-app.post('/login', (req, res) => {
-  const { numberPlate, phoneNumber } = req.body;
+// Optionally, you can restrict it to specific origins (e.g., React running on port 3000)
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only requests from localhost:3000
+  methods: ['GET', 'POST'],
+  credentials: true // Allow cookies if needed
+}));
 
-  // SQL query to insert data into the database
-  const query = `INSERT INTO fines (numberPlate, phoneNumber) VALUES (?, ?)`;
-  
-  db.query(query, [numberPlate, phoneNumber], (err, result) => {
-    if (err) {
-      console.error('Error inserting data:', err);
-      return res.status(500).json({ error: 'Error inserting data into database' });
-    }
-    res.status(200).json({ message: 'Data stored successfully', result });
-  });
+// Rest of your server setup (routes, etc.)
+app.use(express.json());
+
+// Define routes
+app.post('/api/auth/login', (req, res) => {
+  // Handle login logic
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-  console.log('Connected to MySQL database.');
+// Start server
+app.listen(5000, () => {
+  console.log('Server is running on http://localhost:5000');
 });

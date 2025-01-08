@@ -1,18 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Ensure Routes is used
+
 import LoginForm from './components/LoginForm';
 import TransactionPage from './components/TransactionPage';
-import './App.css';
 
 const App = () => {
   return (
     <Router>
-      <div className="app">
-        <Routes>
-          <Route path="/" element={<Navigate to="/login"/>} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/fines" element={<TransactionPage />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route exact path="/" element={<LoginForm />} />
+        <Route path="/transactions" element={<TransactionPage />} />
+      </Routes>
     </Router>
   );
 };
